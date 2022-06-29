@@ -1,0 +1,13 @@
+{
+  "name": "vst-frax-gauge-subgraph",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy shinitakunai/vst-frax-gauge --debug --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --access-token "
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.24.0",
+    "@graphprotocol/graph-ts": "0.24.0"
+  }
+}

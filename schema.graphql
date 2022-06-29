@@ -1,0 +1,13 @@
+type Stake @entity {
+  id: ID!
+  amount_locked: BigInt!
+  start_timestamp: Int!
+  lock_duration: Int!
+  end_timestamp: Int!
+  owner: User!
+}
+
+type User @entity {
+  id: ID!
+  stakes: [Stake!]! @derivedFrom(field: "owner")
+}
