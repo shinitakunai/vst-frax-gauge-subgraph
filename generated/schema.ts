@@ -16,10 +16,11 @@ export class Stake extends Entity {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("amount_locked", Value.fromBigInt(BigInt.zero()));
-    this.set("start_timestamp", Value.fromI32(0));
-    this.set("lock_duration", Value.fromI32(0));
-    this.set("end_timestamp", Value.fromI32(0));
+    this.set("amountLocked", Value.fromBigInt(BigInt.zero()));
+    this.set("startTimestamp", Value.fromI32(0));
+    this.set("lockDuration", Value.fromI32(0));
+    this.set("endTimestamp", Value.fromI32(0));
+    this.set("withdrawTimestamp", Value.fromI32(0));
     this.set("owner", Value.fromString(""));
   }
 
@@ -49,40 +50,49 @@ export class Stake extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get amount_locked(): BigInt {
-    let value = this.get("amount_locked");
+  get amountLocked(): BigInt {
+    let value = this.get("amountLocked");
     return value!.toBigInt();
   }
 
-  set amount_locked(value: BigInt) {
-    this.set("amount_locked", Value.fromBigInt(value));
+  set amountLocked(value: BigInt) {
+    this.set("amountLocked", Value.fromBigInt(value));
   }
 
-  get start_timestamp(): i32 {
-    let value = this.get("start_timestamp");
+  get startTimestamp(): i32 {
+    let value = this.get("startTimestamp");
     return value!.toI32();
   }
 
-  set start_timestamp(value: i32) {
-    this.set("start_timestamp", Value.fromI32(value));
+  set startTimestamp(value: i32) {
+    this.set("startTimestamp", Value.fromI32(value));
   }
 
-  get lock_duration(): i32 {
-    let value = this.get("lock_duration");
+  get lockDuration(): i32 {
+    let value = this.get("lockDuration");
     return value!.toI32();
   }
 
-  set lock_duration(value: i32) {
-    this.set("lock_duration", Value.fromI32(value));
+  set lockDuration(value: i32) {
+    this.set("lockDuration", Value.fromI32(value));
   }
 
-  get end_timestamp(): i32 {
-    let value = this.get("end_timestamp");
+  get endTimestamp(): i32 {
+    let value = this.get("endTimestamp");
     return value!.toI32();
   }
 
-  set end_timestamp(value: i32) {
-    this.set("end_timestamp", Value.fromI32(value));
+  set endTimestamp(value: i32) {
+    this.set("endTimestamp", Value.fromI32(value));
+  }
+
+  get withdrawTimestamp(): i32 {
+    let value = this.get("withdrawTimestamp");
+    return value!.toI32();
+  }
+
+  set withdrawTimestamp(value: i32) {
+    this.set("withdrawTimestamp", Value.fromI32(value));
   }
 
   get owner(): string {

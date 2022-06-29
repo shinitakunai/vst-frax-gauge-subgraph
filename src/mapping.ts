@@ -1,69 +1,38 @@
 import {
-  // TokenIPFSPathUpdated as TokenIPFSPathUpdatedEvent,
-  Transfer as TransferEvent,
-  Token as TokenContract,
-} from "../generated/Token/Token";
+  StakeLocked,
+  WithdrawLocked,
+} from "../generated/VSTFRAX_GAUGE/VSTFRAX_GAUGE";
 
-import { Token, User } from "../generated/schema";
+import { Stake, User } from "../generated/schema";
+import { BigInt } from "@graphprotocol/graph-ts";
 
-export function handleStakeLocked(event: TransferEvent): void {
-  let token = Token.load(event.params.tokenId.toString());
-  if (!token) {
-    let tokenId = event.params.tokenId;
-    token = new Token(tokenId.toString());
-    token.creator = event.params.to.toHexString();
-    token.tokenID = tokenId;
-
-    let tokenContract = TokenContract.bind(event.address);
-    token.contentURI = tokenContract.tokenURI(tokenId);
-    // token.tokenIPFSPath = tokenContract.getTokenIPFSPath(tokenId);
-    token.name = tokenContract.name();
-    token.createdAtTimestamp = event.block.timestamp;
-    if (tokenId.toU64() < 1000000) {
-      token.tier = "Bronze";
-    } else if (tokenId.toU64() < 2000000) {
-      token.tier = "Silver";
-    } else if (tokenId.toU64() < 3000000) {
-      token.tier = "Gold";
-    }
+export function handleStakeLocked(event: StakeLocked): void {
+  let stake = Stake.load(event.params.kek_id.toString());
+  if (!stake) {
+    let stakeId = event.params.kek_id;
+    let startTimestamp = event.block.timestamp;
+    let lockDuration = event.params.secs;
+    stake = new Stake(stakeId.toString());
+    stake.amountLocked = event.params.amount;
+    stake.startTimestamp = startTimestamp.toI32();
+    stake.lockDuration = lockDuration.toI32();
+    stake.endTimestamp = startTimestamp.plus(lockDuration).toI32();
   }
-  token.owner = event.params.to.toHexString();
-  token.save();
+  let userParam = event.params.user.toHexString();
+  stake.owner = userParam;
 
-  let user = User.load(event.params.to.toHexString());
+  let user = User.load(userParam);
   if (!user) {
-    user = new User(event.params.to.toHexString());
+    user = new User(userParam);
     user.save();
   }
 }
 
-export function handleStakeWithdrawn(event: TransferEvent): void {
-  let token = Token.load(event.params.tokenId.toString());
-  if (!token) {
-    let tokenId = event.params.tokenId;
-    token = new Token(tokenId.toString());
-    token.creator = event.params.to.toHexString();
-    token.tokenID = tokenId;
-
-    let tokenContract = TokenContract.bind(event.address);
-    token.contentURI = tokenContract.tokenURI(tokenId);
-    // token.tokenIPFSPath = tokenContract.getTokenIPFSPath(tokenId);
-    token.name = tokenContract.name();
-    token.createdAtTimestamp = event.block.timestamp;
-    if (tokenId.toU64() < 1000000) {
-      token.tier = "Bronze";
-    } else if (tokenId.toU64() < 2000000) {
-      token.tier = "Silver";
-    } else if (tokenId.toU64() < 3000000) {
-      token.tier = "Gold";
-    }
+export function handleStakeWithdrawn(event: WithdrawLocked): void {
+  let stake = Stake.load(event.params.kek_id.toString());
+  if (!stake) {
+    stake = new Stake(event.params.kek_id.toString());
   }
-  token.owner = event.params.to.toHexString();
-  token.save();
-
-  let user = User.load(event.params.to.toHexString());
-  if (!user) {
-    user = new User(event.params.to.toHexString());
-    user.save();
-  }
+  stake.withdrawTimestamp = event.block.timestamp.toI32();
+  stake.amountLocked = new BigInt(0);
 }

@@ -1,0 +1,28 @@
+specVersion: 0.0.2
+description: Vesta V-key nfts
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: VSTFRAX_GAUGE
+    network: arbitrum-one
+    source:
+      address: "0x127963A74c07f72D862F2Bdc225226c3251BD117"
+      abi: VSTFRAX_GAUGE
+      startBlock: 5752224
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Stake
+        - User
+      abis:
+        - name: VSTFRAX_GAUGE
+          file: VSTFRAX_GAUGE/abis/VSTFRAX_GAUGE.json
+      eventHandlers:
+        - event: StakeLocked(indexed address,uint256,uint256,bytes32,address)
+          handler: handleStakeLocked
+        - event: WithdrawLocked(indexed address,uint256,bytes32,address)
+          handler: handleStakeWithdrawn
+      file: VSTFRAX_GAUGE/VSTFRAX_GAUGE.wasm
