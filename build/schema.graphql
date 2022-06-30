@@ -1,6 +1,6 @@
 type Stake @entity {
   id: ID!
-  amountLocked: BigInt!
+  amountLocked: BigDecimal!
   startTimestamp: Int!
   lockDuration: Int!
   endTimestamp: Int!

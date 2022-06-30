@@ -4,7 +4,8 @@ import {
 } from "../generated/VSTFRAX_GAUGE/VSTFRAX_GAUGE";
 
 import { Stake, User } from "../generated/schema";
-import { BigInt } from "@graphprotocol/graph-ts";
+import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
+import { decimalize } from "./helper";
 
 export function handleStakeLocked(event: StakeLocked): void {
   let stake = Stake.load(event.params.kek_id.toHexString());
@@ -13,7 +14,7 @@ export function handleStakeLocked(event: StakeLocked): void {
     let startTimestamp = event.block.timestamp;
     let lockDuration = event.params.secs;
     stake = new Stake(stakeId.toHexString());
-    stake.amountLocked = event.params.amount;
+    stake.amountLocked = decimalize(event.params.amount);
     stake.startTimestamp = startTimestamp.toI32();
     stake.lockDuration = lockDuration.toI32();
     stake.endTimestamp = startTimestamp.plus(lockDuration).toI32();
@@ -34,6 +35,6 @@ export function handleStakeWithdrawn(event: WithdrawLocked): void {
     stake = new Stake(event.params.kek_id.toHexString());
   }
   stake.withdrawTimestamp = event.block.timestamp.toI32();
-  stake.amountLocked = new BigInt(0);
+  stake.amountLocked = new BigDecimal(new BigInt(0));
   stake.save();
 }

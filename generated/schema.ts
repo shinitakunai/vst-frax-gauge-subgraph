@@ -16,7 +16,7 @@ export class Stake extends Entity {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("amountLocked", Value.fromBigInt(BigInt.zero()));
+    this.set("amountLocked", Value.fromBigDecimal(BigDecimal.zero()));
     this.set("startTimestamp", Value.fromI32(0));
     this.set("lockDuration", Value.fromI32(0));
     this.set("endTimestamp", Value.fromI32(0));
@@ -50,13 +50,13 @@ export class Stake extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get amountLocked(): BigInt {
+  get amountLocked(): BigDecimal {
     let value = this.get("amountLocked");
-    return value!.toBigInt();
+    return value!.toBigDecimal();
   }
 
-  set amountLocked(value: BigInt) {
-    this.set("amountLocked", Value.fromBigInt(value));
+  set amountLocked(value: BigDecimal) {
+    this.set("amountLocked", Value.fromBigDecimal(value));
   }
 
   get startTimestamp(): i32 {
